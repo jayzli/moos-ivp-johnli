@@ -1,41 +1,36 @@
 /************************************************************/
 /*    NAME: John Li                                              */
 /*    ORGN: MIT                                             */
-/*    FILE: Odometry.cpp                                        */
+/*    FILE: CommunicationAngle_johnli.cpp                                        */
 /*    DATE:                                                 */
 /************************************************************/
 
 #include <iterator>
 #include "MBUtils.h"
-#include "Odometry.h"
+#include "CommunicationAngle_johnli.h"
 
 using namespace std;
 
 //---------------------------------------------------------
 // Constructor
 
-Odometry::Odometry()
+CommunicationAngle_johnli::CommunicationAngle_johnli()
 {
-  m_first_reading = 'true';
-  m_current_x = 0;
-  m_current_y = 0;
-  m_previous_x = 0;
-  m_previous_y = 0;
-  m_total_distance = 0;
 }
 
 //---------------------------------------------------------
 // Destructor
 
-Odometry::~Odometry()
+CommunicationAngle_johnli::~CommunicationAngle_johnli()
 {
 }
 
 //---------------------------------------------------------
 // Procedure: OnNewMail
 
-bool Odometry::OnNewMail(MOOSMSG_LIST &NewMail)
+bool CommunicationAngle_johnli::OnNewMail(MOOSMSG_LIST &NewMail)
 {
+  AppCastingMOOSApp::OnNewMail(NewMail);
   MOOSMSG_LIST::iterator p;
    
   for(p=NewMail.begin(); p!=NewMail.end(); p++) {
@@ -51,15 +46,6 @@ bool Odometry::OnNewMail(MOOSMSG_LIST &NewMail)
     bool   mdbl  = msg.IsDouble();
     bool   mstr  = msg.IsString();
 #endif
-    string key = msg.GetKey();
-
-    if (key == 'NAV_X')
-      { m_previous_x  = m_current_x;
-	m_current_x = msg.GetDouble();}
-    else if (key == 'NAV_Y')
-      { m_previous_y = m_current_y;
-        m_current_y = msg.GetDouble();}
-
    }
 	
    return(true);
@@ -68,7 +54,7 @@ bool Odometry::OnNewMail(MOOSMSG_LIST &NewMail)
 //---------------------------------------------------------
 // Procedure: OnConnectToServer
 
-bool Odometry::OnConnectToServer()
+bool CommunicationAngle_johnli::OnConnectToServer()
 {
    // register for variables here
    // possibly look at the mission file?
@@ -83,18 +69,18 @@ bool Odometry::OnConnectToServer()
 // Procedure: Iterate()
 //            happens AppTick times per second
 
-bool Odometry::Iterate()
+bool CommunicationAngle_johnli::Iterate()
 {
-  m_total_distance= m_total_distance + sqrt(pow(m_current_y - m_previous_y, 2) +pow(m_current_x - m_previous_x, 2));
-  Notify("ODOMETRY_DIST", m_total_distance);
+  AppCastingMOOSApp::Iterate();
   return(true);
+  AppCastingMOOSApp::PostReport();
 }
 
 //---------------------------------------------------------
 // Procedure: OnStartUp()
 //            happens before connection is open
 
-bool Odometry::OnStartUp()
+bool CommunicationAngle_johnli::OnStartUp()
 {
   list<string> sParams;
   m_MissionReader.EnableVerbatimQuoting(false);
@@ -121,10 +107,9 @@ bool Odometry::OnStartUp()
 //---------------------------------------------------------
 // Procedure: RegisterVariables
 
-void Odometry::RegisterVariables()
+void CommunicationAngle_johnli::RegisterVariables()
 {
+  AppCastingMOOSApp::RegisterVariables();
   // Register("FOOBAR", 0);
-  Register("NAV_X", 0);
-  Register("NAV_Y", 0);
 }
 

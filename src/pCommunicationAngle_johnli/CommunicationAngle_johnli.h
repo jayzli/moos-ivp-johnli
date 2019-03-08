@@ -1,20 +1,22 @@
-/************************************************************/
+ /************************************************************/
 /*    NAME: John Li                                              */
 /*    ORGN: MIT                                             */
-/*    FILE: PrimeFactor.h                                          */
+/*    FILE: CommunicationAngle_johnli.h                                          */
 /*    DATE:                                                 */
 /************************************************************/
 
-#ifndef PrimeFactor_HEADER
-#define PrimeFactor_HEADER
+#ifndef CommunicationAngle_johnli_HEADER
+#define CommunicationAngle_johnli_HEADER
 
-#include "MOOS/libMOOS/MOOSLib.h"
+#include "MOOS/libMOOS/Thirdparty/AppCasting/AppCastingMOOSApp.h"
+#include "math.h"
+#include "stdint.h"
 
-class PrimeFactor : public CMOOSApp
+class CommunicationAngle_johnli : public AppCastingMOOSApp
 {
  public:
-   PrimeFactor();
-   ~PrimeFactor();
+   CommunicationAngle_johnli();
+   ~CommunicationAngle_johnli();
 
  protected: // Standard MOOSApp functions to overload  
    bool OnNewMail(MOOSMSG_LIST &NewMail);

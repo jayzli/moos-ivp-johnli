@@ -9,7 +9,7 @@
 #define Odometry_HEADER
 
 //#include "MOOS/libMOOS/MOOSLib.h"
-#include "MOOS/libMOOS/Thirdparty/AppCasting/AppCastingMOOSapp.h"
+#include "MOOS/libMOOS/Thirdparty/AppCasting/AppCastingMOOSApp.h"
 
 class Odometry : public AppCastingMOOSApp
 {

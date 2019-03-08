@@ -1,8 +1,8 @@
 /************************************************************/
-/*    NAME: John Li                                              */
+/*    NAME: John Li                                         */
 /*    ORGN: MIT                                             */
-/*    FILE: PrimeFactor.h                                          */
-/*    DATE:                                                 */
+/*    FILE: PrimeFactor.h                                   */
+/*    DATE: MAR 2019                                        */
 /************************************************************/
 
 #ifndef PrimeFactor_HEADER
