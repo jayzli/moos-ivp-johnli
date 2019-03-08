@@ -1,0 +1,113 @@
+//--------    FILE: bravo.bhv   -------------
+
+initialize   DEPLOY = false
+initialize   RETURN = false
+
+//----------------------------------------------
+Behavior=BHV_Waypoint
+{
+  name       = waypt_return
+  pwt        = 100
+  condition  = RETURN = true
+  condition  = DEPLOY = true
+  perpetual  = true
+  updates    = RETURN_UPDATE
+  endflag    = RETURN = false
+  endflag    = DEPLOY = false
+  endflag    = MISSION = complete
+	
+           speed = 2.0
+  capture_radius = 2.0
+     slip_radius = 4.0
+          points = 0,0  //set return point to 0,0
+ }
+
+//----------------------------------------------
+Behavior=BHV_ConstantSpeed
+{
+  name       = const_speed
+  pwt        = 200
+  condition  = SPD=true
+  condition  = DEPLOY = true
+  perpetual  = true
+  updates    = SPEED_UPDATE
+  endflag    = SPD = false
+
+     speed = 0.5
+		 duration = 10
+		 duration_reset = CONST_SPD_RESET=true
+	
+}
+
+//----------------------------------------------
+Behavior=BHV_Loiter
+{
+  name      = loiter_east
+  pwt       = 100
+  condition = RETURN = false
+  condition = DEPLOY = true  
+  condition = LOITER_REGION = east // activated only when LOITER _REGION = east
+  duration  = 150  //set the duration of this behavior to 150 sec
+  duration_idle_decay = false
+  endflag   = LOITER_REGION = west //when this behavior ends, vehicle heads to loiter region west
+
+  updates   = LOITER_EAST
+  perpetual = true 
+ 
+  // Parameters specific to this behavior
+  acquire_dist     = 10
+  capture_radius   = 3
+  center_activate  = false
+  clockwise        = true
+  slip_radius      = 15
+  speed            = 2.5
+  spiral_factor    = -2
+
+           polygon = radial:: x =100, y=-75, radius=30, pts=8 //set polygon according to lab instruction
+
+
+    visual_hints = nextpt_color=yellow
+    visual_hints = nextpt_vertex_size=8
+    visual_hints = nextpt_lcolor=gray70
+    visual_hints = vertex_color=dodger_blue, edge_color=white
+    visual_hints = vertex_size=1, edge_size=1
+    visual_hints = label = loiter zone
+
+}
+
+//----------------------------------------------
+Behavior=BHV_Loiter
+{
+  name      = loiter_west
+  pwt       = 100
+  condition = RETURN = false
+  condition = DEPLOY = true
+  condition = LOITER_REGION = west  
+  duration  = 150  //set the duration of this behavior to 150 sec
+  duration_idle_decay = false 
+  endflag   = LOITER_REGION = east //when this behavior ends, vehicle heads to loiter region east
+
+
+  updates   = LOITER_WEST
+  perpetual = true    
+
+  // Parameters specific to this behavior
+  acquire_dist     = 10
+  capture_radius   = 3
+  center_activate  = false
+  clockwise        = true
+  slip_radius      = 15
+  speed            = 2.5
+  spiral_factor    = -2
+
+           polygon = radial:: x =160, y=-50, radius=20, pts=8 //set polygon according to lab instruction
+
+
+    visual_hints = nextpt_color=yellow
+    visual_hints = nextpt_vertex_size=8
+    visual_hints = nextpt_lcolor=gray70
+    visual_hints = vertex_color=dodger_blue, edge_color=white
+    visual_hints = vertex_size=1, edge_size=1
+    visual_hints = label = loiter zone
+
+}

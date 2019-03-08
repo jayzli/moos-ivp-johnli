@@ -1,0 +1,178 @@
+//--------    FILE: bravo.bhv   -------------
+
+initialize   DEPLOY = false
+initialize   RETURN = false
+
+//----------------------------------------------
+Behavior=BHV_Waypoint
+{
+  name       = waypt_return
+  pwt        = 100
+  condition  = RETURN = true
+  condition  = DEPLOY = true
+  perpetual  = true
+  updates    = RETURN_UPDATE
+  endflag    = RETURN = false
+  endflag    = DEPLOY = false
+  endflag    = MISSION = complete
+	
+           speed = 2.0
+  capture_radius = 2.0
+     slip_radius = 4.0
+          points = 0,0  //set return point to 0,0
+ }
+
+//----------------------------------------------
+Behavior=BHV_Loiter
+{
+  name      = loiter_east
+  pwt       = 100
+  condition = RETURN = false
+  condition = DEPLOY = true  
+  condition = LOITER_REGION = east // activated only when LOITER _REGION = east
+  duration  = 150  //set the duration of this behavior to 150 sec
+  duration_idle_decay = false
+  endflag   = LOITER_REGION = west //when this behavior ends, vehicle heads to loiter region west
+
+  updates   = LOITER_EAST
+  perpetual = true 
+ 
+  // Parameters specific to this behavior
+  acquire_dist     = 10
+  capture_radius   = 3
+  center_activate  = false
+  clockwise        = true
+  slip_radius      = 15
+  speed            = 2.5
+  spiral_factor    = -2
+
+           polygon = radial:: x =100, y=-75, radius=30, pts=8 //set polygon according to lab instruction
+
+
+    visual_hints = nextpt_color=yellow
+    visual_hints = nextpt_vertex_size=8
+    visual_hints = nextpt_lcolor=gray70
+    visual_hints = vertex_color=dodger_blue, edge_color=white
+    visual_hints = vertex_size=1, edge_size=1
+    visual_hints = label = loiter zone
+
+}
+
+//----------------------------------------------
+Behavior=BHV_Loiter
+{
+  name      = loiter_west
+  pwt       = 100
+  condition = RETURN = false
+  condition = DEPLOY = true
+  condition = LOITER_REGION = west  
+  duration  = 150  //set the duration of this behavior to 150 sec
+  duration_idle_decay = false 
+  endflag   = LOITER_REGION = east //when this behavior ends, vehicle heads to loiter region east
+
+
+  updates   = LOITER_WEST
+  perpetual = true    
+
+  // Parameters specific to this behavior
+  acquire_dist     = 10
+  capture_radius   = 3
+  center_activate  = false
+  clockwise        = true
+  slip_radius      = 15
+  speed            = 2.5
+  spiral_factor    = -2
+
+           polygon = radial:: x =160, y=-50, radius=20, pts=8 //set polygon according to lab instruction
+
+
+    visual_hints = nextpt_color=yellow
+    visual_hints = nextpt_vertex_size=8
+    visual_hints = nextpt_lcolor=gray70
+    visual_hints = vertex_color=dodger_blue, edge_color=white
+    visual_hints = vertex_size=1, edge_size=1
+    visual_hints = label = loiter zone
+
+}
+
+//----------------------------------------------
+Behavior=BHV_ConstantDepth
+{
+  name       = const_dep_west // loitering in the west
+  pwt        = 200
+//  condition = RETURN = false
+  condition = DEPLOY = true
+  condition = LOITER_REGION = west  
+  duration  = no-time-limit
+//  duration_idle_decay = false 
+  endflag   = LOITER_REGION = east //when this behavior ends, vehicle heads to loiter region east
+
+  perpetual  = true
+  updates    = CONST_DEP_WEST
+
+  depth      = 30 //set depth = 30
+}
+
+//----------------------------------------------
+Behavior=BHV_ConstantDepth
+{
+  name       = const_dep_east // loitering in the east
+  pwt        = 200
+//  condition = RETURN = false
+  condition = DEPLOY = true
+  condition = LOITER_REGION = east  
+  duration  = no-time-limit
+//  duration_idle_decay = false 
+  endflag   = LOITER_REGION = west //when this behavior ends, vehicle heads to loiter region east
+
+  perpetual  = true
+  updates    = CONST_DEP_EAST
+
+  depth      = 10 //set depth = 10
+}
+
+//----------------------------------------------
+Behavior=BHV_GoToDepth
+{
+  name       = surfacing //constant depth behavior to keep vehicle at depth zero 
+  pwt        = 200
+  condition  = SURFACE = true  
+  duration   = no-time-limit
+  updates    = SURFACING_UPDATES
+  depth      = 0:1
+  endflag    = SURFACED = true
+  endflag    = SURFACE = false
+  perpetual  = true
+}
+//----------------------------------------------
+Behavior=BHV_Timer
+{
+  name      = surface_timer
+  condition = DEPLOY = true
+  duration  = 200
+  duration_idle_decay = false
+  duration_reset = SURFACE_TIMER_RESET = true
+  endflag   = DEPLOY = false //stop all other behaviors
+  endflag   = SURFACE = true //define new variable surface
+  perpetual  = true
+}
+
+//----------------------------------------------
+Behavior=BHV_Timer
+{
+  name      = gps_fix_timer
+  condition = SURFACED = true
+
+  duration  = 60
+  duration_idle_decay = false
+  duration_reset = GPS_FIX_TIMER_RESET = true
+  endflag   = DEPLOY = true
+  endflag   = SURFACED = false
+  endflag   = SURFACE_TIMER_RESET = true
+  perpetual  = true
+}
+
+
+
+
+
